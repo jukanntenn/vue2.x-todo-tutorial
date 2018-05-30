@@ -29,7 +29,7 @@
       <input type="button"
              value="标为完成"
              @click="markAsCompleted(todo)"/>
-      <input type="button" value="删除">
+      <input type="button" value="删除" @click="removeTodo(todo)"/>
       <input type="text" value="编辑 todo..."/>
     </li>
   </ul>
@@ -66,6 +66,9 @@
             },
             markAsCompleted: function (todo) {
                 todo.completed = true
+            },
+            removeTodo: function (todo) {
+                this.todos.splice(this.todos.indexOf(todo), 1)
             }
         }
     })
