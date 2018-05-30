@@ -21,20 +21,8 @@
   </div>
   <!-- todo list -->
   <ul>
-    <li>
-      <span class="completed">学习 Vue</span>
-      <input type="button" value="标为完成">
-      <input type="button" value="删除">
-      <input type="text" value="编辑 todo..."/>
-    </li>
-    <li>
-      <span>整个牛项目</span>
-      <input type="button" value="标为完成">
-      <input type="button" value="删除">
-      <input type="text" value="编辑 todo..."/>
-    </li>
-    <li>
-      <span>迎娶白富美走上人生巅峰</span>
+    <li v-for='todo in todos' :key='todo.id'>
+      <span>{{ todo.title }}</span>
       <input type="button" value="标为完成">
       <input type="button" value="删除">
       <input type="text" value="编辑 todo..."/>
@@ -52,5 +40,20 @@
     </span>
   </div>
 </div>
+<script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: '#todo-app',
+        data: function () {
+            return {
+                todos: [
+                    {id: 0, title: '学习 Vue'},
+                    {id: 1, title: '整个牛项目'},
+                    {id: 2, title: '迎娶白富美走上人生巅峰'},
+                ]
+            }
+        },
+    })
+</script>
 </body>
 </html>
