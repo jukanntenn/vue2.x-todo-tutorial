@@ -25,8 +25,10 @@
   <!-- todo list -->
   <ul>
     <li v-for='todo in todos' :key='todo.id'>
-      <span>{{ todo.title }}</span>
-      <input type="button" value="标为完成">
+      <span :class="{completed: todo.completed}">{{ todo.title }}</span>
+      <input type="button"
+             value="标为完成"
+             @click="markAsCompleted(todo)"/>
       <input type="button" value="删除">
       <input type="text" value="编辑 todo..."/>
     </li>
@@ -56,8 +58,14 @@
         },
         methods: {
             addTodo: function () {
-                this.todos.push({id: id++, title: this.newTodoTitle});
-                this.newTodoTitle = ''
+                this.todos.push(
+                    // 修改后的 todo 模型
+                    {id: id++, title: this.newTodoTitle, completed: false}
+                );
+                this.newTodoTitle = '';
+            },
+            markAsCompleted: function (todo) {
+                todo.completed = true
             }
         }
     })
