@@ -17,7 +17,10 @@
 <div id="todo-app">
   <div>
     <input type="button" value="全部标为完成"/>
-    <input type="text" placeholder="添加 todo"/>
+    <input type="text"
+           placeholder="添加 todo"
+           v-model="newTodoTitle"
+           @keyup.enter="addTodo"/>
   </div>
   <!-- todo list -->
   <ul>
@@ -42,17 +45,21 @@
 </div>
 <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
 <script>
+    let id = 0; // 用于 id 生成
     var app = new Vue({
         el: '#todo-app',
         data: function () {
             return {
-                todos: [
-                    {id: 0, title: '学习 Vue'},
-                    {id: 1, title: '整个牛项目'},
-                    {id: 2, title: '迎娶白富美走上人生巅峰'},
-                ]
+                todos: [],
+                newTodoTitle: ''
             }
         },
+        methods: {
+            addTodo: function () {
+                this.todos.push({id: id++, title: this.newTodoTitle});
+                this.newTodoTitle = ''
+            }
+        }
     })
 </script>
 </body>
