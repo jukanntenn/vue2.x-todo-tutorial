@@ -44,7 +44,7 @@
   </ul>
   <!-- end todo list -->
   <div>
-    <span>剩余 3 项未完成 ---</span>
+    <span>剩余 {{leftTodosCount}} 项未完成 ---</span>
     <span>筛选：
       <input type="button" class="selected" value="全部">
       <input type="button" value="进行中">
@@ -96,6 +96,11 @@
                         todo.completed = true
                     }
                 })
+            }
+        },
+        computed: {
+            leftTodosCount: function () {
+                return this.todos.filter(todo => !todo.completed).length
             }
         },
         directives: {
