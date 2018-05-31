@@ -56,8 +56,12 @@
       <input type="button"
              value="已完成"
              @click="intention='completed'"/>
-      <input type="button" value="清除已完成">
-      <input type="button" value="清除全部">
+      <input type="button"
+             value="清除已完成"
+             @click="clearCompleted"/>
+      <input type="button"
+             value="清除全部"
+             @click="clearAll"/>
     </span>
   </div>
 </div>
@@ -104,6 +108,12 @@
                         todo.completed = true
                     }
                 })
+            },
+            clearCompleted: function () {
+                this.todos = this.todos.filter(todo => !todo.completed)
+            },
+            clearAll: function () {
+                this.todos = []
             }
         },
         computed: {
