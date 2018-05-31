@@ -26,7 +26,7 @@
   </div>
   <!-- todo list -->
   <ul>
-    <li v-for='todo in todos' :key='todo.id'>
+    <li v-for='todo in filteredTodos' :key='todo.id'>
       <span :class="{completed: todo.completed}"
             @dblclick="editTodo(todo)">{{ todo.title }}</span>
       <input type="button"
@@ -46,9 +46,16 @@
   <div>
     <span>剩余 {{leftTodosCount}} 项未完成 ---</span>
     <span>筛选：
-      <input type="button" class="selected" value="全部">
-      <input type="button" value="进行中">
-      <input type="button" value="已完成">
+      <input type="button"
+             class="selected"
+             value="全部"
+             @click="intention='all'"/>
+      <input type="button"
+             value="进行中"
+             @click="intention='ongoing'"/>
+      <input type="button"
+             value="已完成"
+             @click="intention='completed'"/>
       <input type="button" value="清除已完成">
       <input type="button" value="清除全部">
     </span>
@@ -63,7 +70,8 @@
             return {
                 todos: [],
                 newTodoTitle: '',
-                editedTodo: null // 用户暂存编辑前的 todo 状态
+                editedTodo: null, // 用户暂存编辑前的 todo 状态
+                intention: 'all', // 默认为 all
             }
         },
         methods: {
@@ -99,8 +107,22 @@
             }
         },
         computed: {
+            leftTodos: function () {
+                return this.todos.filter(todo => !todo.completed)
+            },
             leftTodosCount: function () {
-                return this.todos.filter(todo => !todo.completed).length
+                return this.leftTodos.length
+            },
+            filteredTodos: function () {
+                if (this.intention === 'ongoing') {
+                    return this.leftTodos
+                } else if (this.intention === 'completed') {
+                    return this.todos.filter(todo => todo.completed)
+                } else {
+                    // 其它未定义的意图我们为其返回全部 todos，
+                    // 这里面已经包含了 all 意图了
+                    return this.todos
+                }
             }
         },
         directives: {
