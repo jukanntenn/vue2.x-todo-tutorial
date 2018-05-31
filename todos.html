@@ -16,7 +16,9 @@
 <body>
 <div id="todo-app">
   <div>
-    <input type="button" value="全部标为完成"/>
+    <input type="button"
+           value="全部标为完成"
+           @click="markAllAsCompleted"/>
     <input type="text"
            placeholder="添加 todo"
            v-model="newTodoTitle"
@@ -87,6 +89,13 @@
             cancelEdit: function (todo) {
                 todo.title = this.editedTodo.title;
                 this.editedTodo = null
+            },
+            markAllAsCompleted: function () {
+                this.todos.map(function (todo) {
+                    if (!todo.completed) {
+                        todo.completed = true
+                    }
+                })
             }
         },
         directives: {
