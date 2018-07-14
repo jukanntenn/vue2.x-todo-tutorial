@@ -67,22 +67,45 @@
 </div>
 <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
 <script>
-    let id = 0; // 用于 id 生成
+    var STORAGE_KEY = 'vue2.x-todo-tutorial';
+    var todoStorage = {
+        fetch: function () {
+            var todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            todos.forEach(function (todo, index) {
+                todo.id = index
+            });
+            todoStorage.uid = todos.length;
+            return todos
+        },
+        save: function (todos) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+        }
+    };
+
     var app = new Vue({
         el: '#todo-app',
         data: function () {
             return {
-                todos: [],
+                todos: todoStorage.fetch(),
                 newTodoTitle: '',
                 editedTodo: null, // 用户暂存编辑前的 todo 状态
                 intention: 'all', // 默认为 all
+            }
+        },
+        // 监测 todos 列表的变化，将变化存储到 local storage
+        watch: {
+            todos: {
+                handler: function (todos) {
+                    todoStorage.save(todos)
+                },
+                deep: true
             }
         },
         methods: {
             addTodo: function () {
                 this.todos.push(
                     // 修改后的 todo 模型
-                    {id: id++, title: this.newTodoTitle, completed: false}
+                    {id: todoStorage.uid++, title: this.newTodoTitle, completed: false}
                 );
                 this.newTodoTitle = '';
             },
