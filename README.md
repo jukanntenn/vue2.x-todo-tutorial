@@ -44,7 +44,7 @@
 
 遇到问题或者讨论请在 [issues区](https://github.com/zmrenwu/vue2.x-todo-tutorial/issues) 或者 [教程](https://www.zmrenwu.com/post/63/) 评论区留言。
 
-此外请关注我的个人博客 [追梦人物的博客](https://www.zmrenwu.com/) 或 掘金主页，本项目只是开端，后续将按照 Vue 作者尤雨溪在知乎回答[『新手向：Vue 2.0 的建议学习顺序』](https://zhuanlan.zhihu.com/p/23134551)中给出的学习建议，发布一些列配套教程，帮助大家入门 Vue 开发，敬请期待。
+此外请关注我的个人博客 [追梦人物的博客](https://www.zmrenwu.com/) 或 [掘金主页](https://juejin.im/user/56fbb4bb128fe10050cc9819)，本项目只是开端，后续将按照 Vue 作者尤雨溪在知乎回答[『新手向：Vue 2.0 的建议学习顺序』](https://zhuanlan.zhihu.com/p/23134551)中给出的学习建议，发布一些列配套教程，帮助大家入门 Vue 开发，敬请期待。
 
 ## 教程目录索引
 
