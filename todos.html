@@ -26,21 +26,10 @@
   </div>
   <!-- todo list -->
   <ul>
-    <li v-for='todo in filteredTodos' :key='todo.id'>
-      <span :class="{completed: todo.completed}"
-            @dblclick="editTodo(todo)">{{ todo.title }}</span>
-      <input type="button"
-             value="标为完成"
-             @click="markAsCompleted(todo)"/>
-      <input type="button" value="删除" @click="removeTodo(todo)"/>
-      <input type="text"
-             value="编辑 todo..."
-             v-focus="true"
-             v-if="editedTodo!==null && editedTodo.id===todo.id"
-             v-model="todo.title"
-             @keyup.enter="editDone(todo)"
-             @keyup.esc="cancelEdit(todo)"/>
-    </li>
+    <todo-item v-for="todo in filteredTodos"
+               :todo="todo"
+               :key="todo.id"
+               @remove-todo="removeTodo"/>
   </ul>
   <!-- end todo list -->
   <div>
@@ -78,7 +67,72 @@
   </footer>
 </div>
 <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+
+<script type="text/x-template" id="todo-item">
+  <li>
+    <span :class="{completed: todo.completed}"
+          @dblclick="editTodo(todo)">{{ todo.title }}</span>
+    <input type="button"
+           value="标为完成"
+           @click="markAsCompleted(todo)"/>
+    <input type="button" value="删除" @click="removeTodo(todo)"/>
+    <input type="text"
+           value="编辑 todo..."
+           v-focus="true"
+           v-if="editedTodo!==null && editedTodo.id===todo.id"
+           v-model="todo.title"
+           @keyup.enter="editDone(todo)"
+           @keyup.esc="cancelEdit(todo)"/>
+  </li>
+</script>
+
 <script>
+    // 组件注册
+    Vue.component('todo-item', {
+        template: '#todo-item',
+        data: function () {
+            return {
+                editedTodo: null // 用户暂存编辑前的 todo 状态
+            }
+        },
+        props: {
+            todo: {
+                type: Object,
+                required: true,
+            },
+        },
+        methods: {
+            markAsCompleted: function (todo) {
+                todo.completed = true
+            },
+            removeTodo: function (todo) {
+                this.$emit('remove-todo', todo)
+            },
+            editTodo: function (todo) {
+                this.editedTodo = {id: todo.id, title: todo.title}
+            },
+            editDone: function (todo) {
+                this.editedTodo = null
+            },
+            cancelEdit: function (todo) {
+                todo.title = this.editedTodo.title;
+                this.editedTodo = null
+            }
+        },
+        computed: {
+            editing: function () {
+                return this.editedTodo !== null && this.editedTodo.id === this.todo.id
+            }
+        },
+        directives: {
+            focus: {
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        }
+    });
+
     var STORAGE_KEY = 'vue2.x-todo-tutorial';
     var todoStorage = {
         fetch: function () {
@@ -100,7 +154,6 @@
             return {
                 todos: todoStorage.fetch(),
                 newTodoTitle: '',
-                editedTodo: null, // 用户暂存编辑前的 todo 状态
                 intention: 'all', // 默认为 all
             }
         },
@@ -121,21 +174,8 @@
                 );
                 this.newTodoTitle = '';
             },
-            markAsCompleted: function (todo) {
-                todo.completed = true
-            },
             removeTodo: function (todo) {
                 this.todos.splice(this.todos.indexOf(todo), 1)
-            },
-            editTodo: function (todo) {
-                this.editedTodo = {id: todo.id, title: todo.title}
-            },
-            editDone: function (todo) {
-                this.editedTodo = null
-            },
-            cancelEdit: function (todo) {
-                todo.title = this.editedTodo.title;
-                this.editedTodo = null
             },
             markAllAsCompleted: function () {
                 this.todos.map(function (todo) {
@@ -167,13 +207,6 @@
                     // 其它未定义的意图我们为其返回全部 todos，
                     // 这里面已经包含了 all 意图了
                     return this.todos
-                }
-            }
-        },
-        directives: {
-            focus: {
-                inserted: function (el) {
-                    el.focus()
                 }
             }
         }
